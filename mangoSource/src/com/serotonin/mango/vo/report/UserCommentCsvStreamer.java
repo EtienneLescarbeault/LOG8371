@@ -34,19 +34,23 @@ public class UserCommentCsvStreamer {
         CsvWriter csvWriter = new CsvWriter();
         String[] data = new String[5];
 
-        // Write the headers.
+        // Write the csv headers.
         data[0] = I18NUtils.getMessage(bundle, "users.username");
         data[1] = I18NUtils.getMessage(bundle, "reports.commentList.type");
         data[2] = I18NUtils.getMessage(bundle, "reports.commentList.typeKey");
         data[3] = I18NUtils.getMessage(bundle, "reports.commentList.time");
         data[4] = I18NUtils.getMessage(bundle, "notes.note");
+
         out.write(csvWriter.encodeRow(data));
 
         for (ReportUserComment comment : comments) {
+
             data[0] = comment.getUsername();
+
             if (data[0] == null)
                 data[0] = I18NUtils.getMessage(bundle, "common.deleted");
-            if (comment.getCommentType() == UserComment.TYPE_EVENT) {
+            
+		if (comment.getCommentType() == UserComment.TYPE_EVENT) {
                 data[1] = I18NUtils.getMessage(bundle, "reports.commentList.type.event");
                 data[2] = Integer.toString(comment.getTypeKey());
             }

@@ -89,6 +89,7 @@ public class ReportVO implements Serializable {
     public ReportVO() {
         // Default the specific date fields.
         DateTime dt = DateUtils.truncateDateTime(new DateTime(), Common.TimePeriods.DAYS);
+
         toYear = dt.getYear();
         toMonth = dt.getMonthOfYear();
         toDay = dt.getDayOfMonth();
@@ -96,6 +97,7 @@ public class ReportVO implements Serializable {
         toMinute = dt.getMinuteOfHour();
 
         dt = DateUtils.minus(dt, Common.TimePeriods.DAYS, 1);
+
         fromYear = dt.getYear();
         fromMonth = dt.getMonthOfYear();
         fromDay = dt.getDayOfMonth();
@@ -386,6 +388,7 @@ public class ReportVO implements Serializable {
         out.writeInt(fromDay);
         out.writeInt(fromHour);
         out.writeInt(fromMinute);
+
         out.writeBoolean(toNone);
         out.writeInt(toYear);
         out.writeInt(toMonth);
@@ -396,7 +399,9 @@ public class ReportVO implements Serializable {
         out.writeBoolean(schedule);
         out.writeInt(schedulePeriod);
         out.writeInt(runDelayMinutes);
+
         SerializationHelper.writeSafeUTF(out, scheduleCron);
+
         out.writeBoolean(email);
         out.writeObject(recipients);
         out.writeBoolean(includeData);
@@ -408,8 +413,10 @@ public class ReportVO implements Serializable {
         // Switch on the version of the class so that version changes can be elegantly handled.
         int ver = in.readInt();
         points = (ver >= 5)? (List<ReportPointVO>) in.readObject() : convertToReportPointVOs((List<Integer>) in.readObject());
+
         includeEvents = (ver <= 2)? EVENTS_ALARMS : in.readInt();
         includeUserComments = (ver <= 3)? true : in.readBoolean();
+
         dateRangeType = in.readInt();
         relativeDateType = in.readInt();
 
@@ -424,6 +431,7 @@ public class ReportVO implements Serializable {
         fromDay = in.readInt();
         fromHour = in.readInt();
         fromMinute = in.readInt();
+
         toNone = in.readBoolean();
         toYear = in.readInt();
         toMonth = in.readInt();
@@ -435,6 +443,7 @@ public class ReportVO implements Serializable {
         schedulePeriod = in.readInt();
         runDelayMinutes = (ver == 1)? 0 : in.readInt();
         scheduleCron = SerializationHelper.readSafeUTF(in);
+
         email = in.readBoolean();
         recipients = (List<RecipientListEntryBean>) in.readObject();
         includeData = in.readBoolean();
@@ -443,9 +452,12 @@ public class ReportVO implements Serializable {
 
     private static List<ReportPointVO> convertToReportPointVOs(List<Integer> ids) {
         List<ReportPointVO> result = new ArrayList<ReportPointVO>();
+
         for (Integer id : ids) {
+
             ReportPointVO vo = new ReportPointVO();
             vo.setPointId(id);
+
             result.add(vo);
         }
         return result;

@@ -31,6 +31,7 @@ import com.serotonin.mango.view.text.TextRenderer;
  * @author Matthew Lohbihler
  */
 public class DiscreteTimeSeries {
+
     private final String name;
     private final TextRenderer textRenderer;
     private final Paint paint;
@@ -50,6 +51,7 @@ public class DiscreteTimeSeries {
     @SuppressWarnings("unchecked")
     public void addValueTime(PointValueTime pvt) {
         MangoValue value = pvt.getValue();
+
         if (value == null)
             return;
 
@@ -57,6 +59,7 @@ public class DiscreteTimeSeries {
 
         if (getValueIndex(value) == -1) {
             String text;
+
             if (textRenderer == null)
                 text = value.toString();
             else
@@ -87,6 +90,7 @@ public class DiscreteTimeSeries {
 
     public int getValueIndex(MangoValue value) {
         for (int i = 0; i < valueDescriptions.size(); i++) {
+
             if (valueDescriptions.get(i).getValue().equals(value))
                 return i;
         }
@@ -98,6 +102,7 @@ public class DiscreteTimeSeries {
     }
 
     class ValueDescription implements Comparable<ValueDescription> {
+
         private final Comparable<Object> value;
         private final String description;
 

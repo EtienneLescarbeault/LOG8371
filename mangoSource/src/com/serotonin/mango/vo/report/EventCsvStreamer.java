@@ -32,11 +32,12 @@ import com.serotonin.web.i18n.LocalizableMessage;
  * @author Matthew Lohbihler
  */
 public class EventCsvStreamer {
+
     public EventCsvStreamer(PrintWriter out, List<EventInstance> events, ResourceBundle bundle) {
         CsvWriter csvWriter = new CsvWriter();
         String[] data = new String[7];
 
-        // Write the headers.
+        // Write the csv file headers.
         data[0] = I18NUtils.getMessage(bundle, "reports.eventList.id");
         data[1] = I18NUtils.getMessage(bundle, "common.alarmLevel");
         data[2] = I18NUtils.getMessage(bundle, "common.activeTime");
@@ -48,6 +49,7 @@ public class EventCsvStreamer {
         out.write(csvWriter.encodeRow(data));
 
         for (EventInstance event : events) {
+
             data[0] = Integer.toString(event.getId());
             data[1] = AlarmLevels.getAlarmLevelMessage(event.getAlarmLevel()).getLocalizedMessage(bundle);
             data[2] = event.getPrettyActiveTimestamp();
@@ -64,6 +66,7 @@ public class EventCsvStreamer {
                 data[5] = event.getFullPrettyAcknowledgedTimestamp();
 
                 LocalizableMessage ack = event.getAckMessage();
+
                 if (ack == null)
                     data[6] = "";
                 else

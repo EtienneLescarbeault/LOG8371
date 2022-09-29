@@ -37,11 +37,12 @@ public class ReportJob extends TimerTask {
 
     public static void scheduleReportJob(ReportVO report) {
         synchronized (JOB_REGISTRY) {
-            // Ensure that there is no existing job.
+            // Ensure that the given report isn't already scheduled in the schedule job.
             unscheduleReportJob(report);
 
             if (report.isSchedule()) {
                 CronTimerTrigger trigger;
+
                 if (report.getSchedulePeriod() == ReportVO.SCHEDULE_CRON) {
                     try {
                         trigger = new CronTimerTrigger(report.getScheduleCron());
@@ -63,6 +64,7 @@ public class ReportJob extends TimerTask {
     public static void unscheduleReportJob(ReportVO report) {
         synchronized (JOB_REGISTRY) {
             ReportJob reportJob = JOB_REGISTRY.remove(report.getId());
+
             if (reportJob != null)
                 reportJob.cancel();
         }

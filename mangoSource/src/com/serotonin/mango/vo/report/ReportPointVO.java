@@ -45,9 +45,10 @@ public class ReportPointVO implements Serializable {
 
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeInt(version);
-
         out.writeInt(pointId);
+
         SerializationHelper.writeSafeUTF(out, colour);
+
         out.writeBoolean(consolidatedChart);
     }
 
@@ -57,11 +58,13 @@ public class ReportPointVO implements Serializable {
         // Switch on the version of the class so that version changes can be elegantly handled.
         if (ver == 1) {
             pointId = in.readInt();
+
             colour = SerializationHelper.readSafeUTF(in);
             consolidatedChart = true;
         }
         else if (ver == 2) {
             pointId = in.readInt();
+
             colour = SerializationHelper.readSafeUTF(in);
             consolidatedChart = in.readBoolean();
         }

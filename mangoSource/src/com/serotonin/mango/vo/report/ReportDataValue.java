@@ -31,7 +31,7 @@ public class ReportDataValue implements IValueTime {
     private String annotation;
 
     public ReportDataValue() {
-        // no op
+        // no operation, empty constructor
     }
 
     public ReportDataValue(MangoValue value, long time) {

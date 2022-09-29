@@ -41,6 +41,7 @@ public class ReportInstance {
     private String name;
     private int includeEvents;
     private boolean includeUserComments;
+
     private long reportStartTime = -1;
     private long reportEndTime = -1;
     private long runStartTime = -1;
@@ -51,40 +52,49 @@ public class ReportInstance {
     private ResourceBundle bundle;
 
     public ReportInstance() {
-        // no op
+        // no operation, empty constructor
     }
 
     public ReportInstance(ReportVO template) {
         userId = template.getUserId();
         name = template.getName();
+
         includeEvents = template.getIncludeEvents();
         includeUserComments = template.isIncludeUserComments();
 
         if (template.getDateRangeType() == ReportVO.DATE_RANGE_TYPE_RELATIVE) {
+
             if (template.getRelativeDateType() == ReportVO.RELATIVE_DATE_TYPE_PREVIOUS) {
                 DateTime date = DateUtils.truncateDateTime(new DateTime(), template.getPreviousPeriodType());
                 reportEndTime = date.getMillis();
+
                 date = DateUtils.minus(date, template.getPreviousPeriodType(), template.getPreviousPeriodCount());
+
                 reportStartTime = date.getMillis();
             }
             else {
                 DateTime date = new DateTime();
                 reportEndTime = date.getMillis();
+
                 date = DateUtils.minus(date, template.getPastPeriodType(), template.getPastPeriodCount());
+
                 reportStartTime = date.getMillis();
             }
         }
         else {
+
             if (!template.isFromNone()) {
                 DateTime date = new DateTime(template.getFromYear(), template.getFromMonth(), template.getFromDay(),
                         template.getFromHour(), template.getFromMinute(), 0, 0);
-                reportStartTime = date.getMillis();
+                
+		    reportStartTime = date.getMillis();
             }
 
             if (!template.isToNone()) {
                 DateTime date = new DateTime(template.getToYear(), template.getToMonth(), template.getToDay(), template
                         .getToHour(), template.getToMinute(), 0, 0);
-                reportEndTime = date.getMillis();
+                
+		    reportEndTime = date.getMillis();
             }
         }
     }
@@ -92,10 +102,13 @@ public class ReportInstance {
     public int getState() {
         if (runStartTime == -1)
             return STATE_NOT_STARTED;
+
         if (runEndTime == -1)
             return STATE_STARTED;
+
         if (recordCount == -1)
             return STATE_FAILED;
+
         return STATE_FINISHED;
     }
 
@@ -114,44 +127,54 @@ public class ReportInstance {
     public String getPrettyReportStartTime() {
         if (reportStartTime == -1)
             return I18NUtils.getMessage(bundle, "common.inception");
+
         return DateFunctions.getFullMinuteTime(reportStartTime);
     }
 
     public String getPrettyReportEndTime() {
         if (reportEndTime == -1)
             return I18NUtils.getMessage(bundle, "reports.now");
+
         return DateFunctions.getFullMinuteTime(reportEndTime);
     }
 
     public String getPrettyRunStartTime() {
         if (runStartTime == -1)
             return I18NUtils.getMessage(bundle, "reports.notStarted");
+
         return DateFunctions.getFullMinuteTime(runStartTime);
     }
 
     public String getPrettyRunEndTime() {
         if (runStartTime == -1)
             return "";
+
         if (runEndTime == -1)
             return I18NUtils.getMessage(bundle, "reports.inProgress");
+
         return DateFunctions.getFullMinuteTime(runEndTime);
     }
 
     public String getPrettyRunDuration() {
         if (runStartTime == -1)
             return "";
+
         if (runEndTime == -1)
             return I18NUtils.getMessage(bundle, "reports.inProgress");
+
         return DateUtils.getDuration(runEndTime - runStartTime).getLocalizedMessage(bundle);
     }
 
     public String getPrettyRecordCount() {
         if (runStartTime == -1)
             return "";
+
         if (runEndTime == -1)
             return "";
+
         if (recordCount == -1)
             return I18NUtils.getMessage(bundle, "reports.failed");
+
         return Integer.toString(recordCount);
     }
 

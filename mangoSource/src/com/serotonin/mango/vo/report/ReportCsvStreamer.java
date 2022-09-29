@@ -37,6 +37,7 @@ public class ReportCsvStreamer implements ReportDataStreamHandler {
 
     // Working fields
     private TextRenderer textRenderer;
+    // to store data for each line of the csv
     private final String[] data = new String[5];
     private final DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm:ss");
     private final CsvWriter csvWriter = new CsvWriter();
@@ -44,17 +45,19 @@ public class ReportCsvStreamer implements ReportDataStreamHandler {
     public ReportCsvStreamer(PrintWriter out, ResourceBundle bundle) {
         this.out = out;
 
-        // Write the headers.
+        // Write the csv headers.
         data[0] = I18NUtils.getMessage(bundle, "reports.pointName");
         data[1] = I18NUtils.getMessage(bundle, "common.time");
         data[2] = I18NUtils.getMessage(bundle, "common.value");
         data[3] = I18NUtils.getMessage(bundle, "reports.rendered");
         data[4] = I18NUtils.getMessage(bundle, "common.annotation");
+
         out.write(csvWriter.encodeRow(data));
     }
 
     public void startPoint(ReportPointInfo pointInfo) {
         data[0] = pointInfo.getExtendedName();
+
         textRenderer = pointInfo.getTextRenderer();
     }
 

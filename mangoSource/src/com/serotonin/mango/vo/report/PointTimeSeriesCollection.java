@@ -32,6 +32,7 @@ import com.serotonin.mango.rt.dataImage.PointValueTime;
  * @author Matthew Lohbihler
  */
 public class PointTimeSeriesCollection {
+
     private TimeSeriesCollection numericTimeSeriesCollection;
     private List<Paint> numericPaint;
     private List<DiscreteTimeSeries> discreteTimeSeriesCollection;
@@ -41,17 +42,21 @@ public class PointTimeSeriesCollection {
     }
 
     public void addNumericTimeSeries(TimeSeries numericTimeSeries, Paint paint) {
+
         if (numericTimeSeriesCollection == null) {
             numericTimeSeriesCollection = new TimeSeriesCollection();
             numericPaint = new ArrayList<Paint>();
         }
+
         numericTimeSeriesCollection.addSeries(numericTimeSeries);
         numericPaint.add(paint);
     }
 
     public void addDiscreteTimeSeries(DiscreteTimeSeries discreteTimeSeries) {
+
         if (discreteTimeSeriesCollection == null)
             discreteTimeSeriesCollection = new ArrayList<DiscreteTimeSeries>();
+
         discreteTimeSeriesCollection.add(discreteTimeSeries);
     }
 
@@ -69,10 +74,13 @@ public class PointTimeSeriesCollection {
 
     public boolean hasMultiplePoints() {
         int count = 0;
+
         if (numericTimeSeriesCollection != null)
             count += numericTimeSeriesCollection.getSeriesCount();
+
         if (discreteTimeSeriesCollection != null)
             count += discreteTimeSeriesCollection.size();
+
         return count > 1;
     }
 
@@ -99,12 +107,16 @@ public class PointTimeSeriesCollection {
         TimeSeriesCollection timeSeriesCollection = new TimeSeriesCollection();
 
         int intervalIndex = 1;
+
         for (DiscreteTimeSeries dts : discreteTimeSeriesCollection) {
+
             TimeSeries ts = new TimeSeries(dts.getName(), null, null, Second.class);
 
-            for (PointValueTime pvt : dts.getValueTimes())
+            for (PointValueTime pvt : dts.getValueTimes()){
+
                 ImageChartUtils.addSecond(ts, pvt.getTime(), numericMin
                         + (spacingInterval * (dts.getValueIndex(pvt.getValue()) + intervalIndex)));
+		}
 
             timeSeriesCollection.addSeries(ts);
 
