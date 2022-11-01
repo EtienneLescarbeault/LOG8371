@@ -286,7 +286,7 @@ public class ReportDao extends BaseDao {
 
             String annoCase;
             switch (Common.ctx.getDatabaseAccess().getType()) {
-                case DatabaseAccess.DatabaseType.DERBY:
+                case DERBY:
                     annoCase = "    case when pva.sourceType=1 then '" + userLabel //
                             + ": ' || (case when u.username is null then '" + deletedLabel + "' else u.username end) " //
                             + "         when pva.sourceType=2 then '" + setPointLabel + "' " //
@@ -294,7 +294,7 @@ public class ReportDao extends BaseDao {
                             + "         else 'Unknown source type: ' || cast(pva.sourceType as char(3)) " //
                             + "    end ";
                     break;
-                case DatabaseAccess.DatabaseType.MSSQL:
+                case MSSQL:
                     annoCase = "    case pva.sourceType" //
                             + "        when 1 then '" + userLabel + ": ' + isnull(u.username, '" + deletedLabel + "') " //
                             + "        when 2 then '" + setPointLabel + "'" //
@@ -302,7 +302,7 @@ public class ReportDao extends BaseDao {
                             + "        else 'Unknown source type: ' + cast(pva.sourceType as nvarchar)" //
                             + "    end ";
                     break;
-                case DatabaseAccess.DatabaseType.MYSQL:
+                case MYSQL:
                     annoCase = "    case pva.sourceType" //
                             + "      when 1 then concat('" + userLabel + ": ',ifnull(u.username,'" + deletedLabel + "')) " //
                             + "      when 2 then '" + setPointLabel + "'" //
