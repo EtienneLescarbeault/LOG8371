@@ -285,8 +285,7 @@ public class ReportDao extends BaseDao {
             count += ejt.update(insertSQL, appendParameters(timestampParams, point.getId(), dataType));
 
             String annoCase;
-            DatabaseType databaseType = Common.ctx.getDatabaseAccess().getType()
-            switch(databaseType) {
+            switch (Common.ctx.getDatabaseAccess().getType()) {
                 case DatabaseAccess.DatabaseType.DERBY:
                     annoCase = "    case when pva.sourceType=1 then '" + userLabel //
                             + ": ' || (case when u.username is null then '" + deletedLabel + "' else u.username end) " //
@@ -294,6 +293,7 @@ public class ReportDao extends BaseDao {
                             + "         when pva.sourceType=3 then '" + anonymousLabel + "' " //
                             + "         else 'Unknown source type: ' || cast(pva.sourceType as char(3)) " //
                             + "    end ";
+                    break;
                 case DatabaseAccess.DatabaseType.MSSQL:
                     annoCase = "    case pva.sourceType" //
                             + "        when 1 then '" + userLabel + ": ' + isnull(u.username, '" + deletedLabel + "') " //
@@ -301,6 +301,7 @@ public class ReportDao extends BaseDao {
                             + "        when 3 then '" + anonymousLabel + "'" //
                             + "        else 'Unknown source type: ' + cast(pva.sourceType as nvarchar)" //
                             + "    end ";
+                    break;
                 case DatabaseAccess.DatabaseType.MYSQL:
                     annoCase = "    case pva.sourceType" //
                             + "      when 1 then concat('" + userLabel + ": ',ifnull(u.username,'" + deletedLabel + "')) " //
@@ -308,9 +309,10 @@ public class ReportDao extends BaseDao {
                             + "      when 3 then '" + anonymousLabel + "'" //
                             + "      else concat('Unknown source type: ', pva.sourceType)" //
                             + "    end ";
+                    break;
                 default :
                     throw new ShouldNeverHappenException("unhandled database type: "
-                            + databaseType);
+                            + Common.ctx.getDatabaseAccess().getType());
             }
 
             // Insert the reportInstanceDataAnnotations records
