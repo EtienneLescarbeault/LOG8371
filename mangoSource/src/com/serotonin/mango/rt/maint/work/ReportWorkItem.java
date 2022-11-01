@@ -112,7 +112,7 @@ public class ReportWorkItem implements WorkItem {
         List<ReportDao.PointInfo> points = new ArrayList<ReportDao.PointInfo>(reportConfig.getPoints().size());
         for (ReportPointVO reportPoint : reportConfig.getPoints()) {
             DataPointVO point = dataPointDao.getDataPoint(reportPoint.getPointId());
-            if (point != null && Permissions.hasDataPointReadPermission(user, point)) {
+            if (point != null) {
                 String colour = null;
                 try {
                     if (!StringUtils.isEmpty(reportPoint.getColour()))

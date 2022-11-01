@@ -137,7 +137,8 @@ public class Permissions {
 
     private static boolean hasDataPointReadPermission(User user, int dataSourceId, int dataPointId)
             throws PermissionException {
-        if (hasDataSourcePermission(user, dataSourceId))
+        ensureValidUser(user);
+        if (user.isAdmin())
             return true;
         DataPointAccess a = getDataPointAccess(user, dataPointId);
         if (a == null)
